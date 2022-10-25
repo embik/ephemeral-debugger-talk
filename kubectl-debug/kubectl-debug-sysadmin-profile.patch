@@ -1,0 +1,80 @@
+diff --git a/staging/src/k8s.io/kubectl/pkg/cmd/debug/profile_applier.go b/staging/src/k8s.io/kubectl/pkg/cmd/debug/profile_applier.go
+index d2a71a23aa4..93fec6b6f81 100644
+--- a/staging/src/k8s.io/kubectl/pkg/cmd/debug/profile_applier.go
++++ b/staging/src/k8s.io/kubectl/pkg/cmd/debug/profile_applier.go
+@@ -25,6 +25,7 @@ import (
+ 
+ // ProfileLegacy represents the legacy debugging profile which is backwards-compatible with 1.23 behavior.
+ const ProfileLegacy = "legacy"
++const ProfileSysadmin = "sysadmin"
+ 
+ type ProfileApplier interface {
+ 	// Apply applies the profile to the given container in the pod.
+@@ -36,6 +37,8 @@ func NewProfileApplier(profile string) (ProfileApplier, error) {
+ 	switch profile {
+ 	case ProfileLegacy:
+ 		return applierFunc(profileLegacy), nil
++	case ProfileSysadmin:
++		return applierFunc(profileSysadmin), nil
+ 	}
+ 
+ 	return nil, fmt.Errorf("unknown profile: %s", profile)
+diff --git a/staging/src/k8s.io/kubectl/pkg/cmd/debug/profiles.go b/staging/src/k8s.io/kubectl/pkg/cmd/debug/profiles.go
+index 07b14a6d6c1..37d69eb8193 100644
+--- a/staging/src/k8s.io/kubectl/pkg/cmd/debug/profiles.go
++++ b/staging/src/k8s.io/kubectl/pkg/cmd/debug/profiles.go
+@@ -21,6 +21,7 @@ import (
+ 
+ 	corev1 "k8s.io/api/core/v1"
+ 	"k8s.io/apimachinery/pkg/runtime"
++	"k8s.io/utils/pointer"
+ )
+ 
+ // profileLegacy represents the legacy debugging profile which is backwards-compatible with 1.23 behavior.
+@@ -57,3 +58,46 @@ func profileLegacy(pod *corev1.Pod, containerName string, target runtime.Object)
+ 		return fmt.Errorf("the %s profile doesn't support objects of type %T", ProfileLegacy, target)
+ 	}
+ }
++
++func profileSysadmin(pod *corev1.Pod, containerName string, target runtime.Object) error {
++	switch target.(type) {
++	case *corev1.Pod:
++		for i := range pod.Spec.EphemeralContainers {
++			container := &pod.Spec.EphemeralContainers[i]
++
++			if container.Name == containerName {
++				pod.Spec.EphemeralContainers[i].SecurityContext = &corev1.SecurityContext{
++					Privileged: pointer.Bool(true),
++				}
++			}
++		}
++		return nil
++	case *corev1.Node:
++		const volumeName = "host-root"
++		pod.Spec.Volumes = append(pod.Spec.Volumes, corev1.Volume{
++			Name: volumeName,
++			VolumeSource: corev1.VolumeSource{
++				HostPath: &corev1.HostPathVolumeSource{Path: "/"},
++			},
++		})
++
++		for i := range pod.Spec.Containers {
++			container := &pod.Spec.Containers[i]
++			if container.Name != containerName {
++				continue
++			}
++			container.VolumeMounts = append(container.VolumeMounts, corev1.VolumeMount{
++				MountPath: "/host",
++				Name:      volumeName,
++			})
++		}
++
++		pod.Spec.HostIPC = true
++		pod.Spec.HostNetwork = true
++		pod.Spec.HostPID = true
++		return nil
++	default:
++		return fmt.Errorf("the %s profile doesn't support objects of type %T", ProfileLegacy, target)
++	}
++
++}
