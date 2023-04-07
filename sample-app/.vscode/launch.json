@@ -2,9 +2,9 @@
   "version": "0.2.0",
   "configurations": [
     {
-	  "name": "Remote Attach",
-	  "type": "go",
-	  "request": "attach",
+      "name": "Remote Attach",
+      "type": "go",
+      "request": "attach",
       "debugAdapter": "dlv-dap",
       "mode": "remote",
       "substitutePath": [
