@@ -23,7 +23,7 @@ spec:
       containers:
       - name:  sample-app
         image:  quay.io/embik/sample-app:v0.1.0
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         resources:
           requests:
             cpu: 100m
