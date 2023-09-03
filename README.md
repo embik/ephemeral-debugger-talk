@@ -25,3 +25,7 @@ While the talk will use Go and Delve as an example, the considerations and steps
 - [sample-app](./sample-app/): very, very simple Go webserver that is debugged during the talk.
 - [deploy](./deploy/): deployment manifests for the sample application.
 - [images](./images/): Dockerfile for a [Delve](https://github.com/go-delve/delve) container image, used as part of the talk.
+
+## Sources
+
+- [go-delve/delve#2295 - optimized code pitfalls](https://github.com/go-delve/delve/issues/2295#issuecomment-758130802)
