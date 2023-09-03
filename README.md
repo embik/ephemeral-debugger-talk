@@ -7,7 +7,7 @@ This repository serves as companion repository to the talk _Ephemeral Containers
 This talk has been given or is scheduled for the following events:
 
 - [ContainerDays 2023](https://www.containerdays.io/), September 2023, Hamburg
-- [Cloud Native Rejekts EU 2023](https://cfp.cloud-native.rejekts.io/cloud-native-rejekts-eu-amsterdam-2023/talk/XSGW8F/), April 2023, Amsterdam
+- [Cloud Native Rejekts EU 2023](https://cfp.cloud-native.rejekts.io/cloud-native-rejekts-eu-amsterdam-2023/talk/XSGW8F/), April 2023, Amsterdam - [Recording](https://www.youtube.com/watch?v=yq0xyw-e_J8), [Slides](./slides/rejekts_amsterdam_2023.pdf)
 
 ## Talk Description
 
