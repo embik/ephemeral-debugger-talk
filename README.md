@@ -1,6 +1,13 @@
 # Ephemeral Containers in Action - Running a Go Debugger in Kubernetes
 
-This repository serves as companion repository to the talk [Ephemeral Containers in Action - Running a Go Debugger in Kubernetes](https://cfp.cloud-native.rejekts.io/cloud-native-rejekts-eu-amsterdam-2023/talk/XSGW8F/), given at [Cloud Native Rejekts](https://cloud-native.rejekts.io) EU 2023.
+This repository serves as companion repository to the talk _Ephemeral Containers in Action - Running a Go Debugger in Kubernetes_.
+
+## Events
+
+This talk has been given or is scheduled for the following events:
+
+- [ContainerDays 2023](https://www.containerdays.io/), September 2023, Hamburg
+- [Cloud Native Rejekts EU 2023](https://cfp.cloud-native.rejekts.io/cloud-native-rejekts-eu-amsterdam-2023/talk/XSGW8F/), April 2023, Amsterdam
 
 ## Talk Description
 
@@ -18,8 +25,3 @@ While the talk will use Go and Delve as an example, the considerations and steps
 - [sample-app](./sample-app/): very, very simple Go webserver that is debugged during the talk.
 - [deploy](./deploy/): deployment manifests for the sample application.
 - [images](./images/): Dockerfile for a [Delve](https://github.com/go-delve/delve) container image, used as part of the talk.
-- [kubectl-debug](./kubectl-debug/): a simple patch to `kubectl debug` that was hacked together in the early days of this talk.
-
-## Other Resources
-
-- [embik/kubectl-ephemeral](https://github.com/embik/kubectl-ephemeral): the custom `kubectl` plugin used for launching Delve as ephemeral container.
